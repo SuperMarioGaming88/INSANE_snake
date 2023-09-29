@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YOU GONA TURN INTO A GOOMBA</title>
+    <style>
+        #snake {
+            width: 50px;
+            height: 50px;
+            position: absolute;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas" width="1420" height="720"></canvas>
+    <img id="snake" src="tinkaton.PNG">
+</body>
+<script>
+    document.addEventListener("keydown", keydownHandler)
+    var canvas = document.getElementById("canvas")
+    var ctx = canvas.getContext("2d")
+    var snakeX = 120
+    var snakeY = 120
+    var tailX = [-30,-30,-30]
+    var tailY = [-30,-30,-30]
+    var changeX = 0
+    var changeY = 0
+    var tailChangeX = 0
+    var tailChangeY = 0
+    var abbleX = 0
+    var abbleY = 0
+    var abbleDrawn = false
+    var snakeDie = false
+    var speed = 50
+
+    setInterval(drawEverything, speed)
+
+    function drawEverything() {
+        gridDraw()
+        changePos()
+        drawSnake()
+        drawTail()
+        tailPos()
+        abblePos()
+    }
+
+    function drawSnake() {
+        if (snakeDie === false) {
+            ctx.fillStyle = "green"
+            ctx.fillRect(snakeX, snakeY, 25, 25)
+        }
+    }
+    function drawTail() {
+        if (snakeDie === false) {
+            for (i = 0; i < tailX.length; i++) {
+                ctx.fillStyle = "#0C0C0C"
+                ctx.fillRect(tailX[i], tailY[i], 25, 25)
+            }
+        }
+    }
+    function abblePos(){
+        if(abbleDrawn===false){
+            abbleX=Math.floor(Math.random() * 25)*30
+            abbleY=Math.floor(Math.random() * 25)*30
+            abbleDrawn=true
+        }else{
+            ctx.fillStyle = "red"
+                ctx.fillRect(abbleX, abbleY, 25, 25)
+        }if (abbleX >= 750) {
+            abbleDrawn=false
+        } if (abbleX <= -30) {
+            abbleDrawn=false
+        } if (abbleY >= 720) {
+            abbleDrawn=false
+        } if (abbleY <= -30) {
+            abbleDrawn=false
+        }if(snakeX===abbleX){
+            if(snakeY===abbleY){
+                abbleDrawn=false
+            }
+        }for (i = 0; i < tailX.length; i++){
+            if(abbleX===tailX[i]){
+                if(abbleY===tailY[i]){
+                    abbleDrawn=false
+                }
+            }
+        }
+    }
+    function gridDraw() {
+        ctx.fillStyle = "black"
+        for (j = 0; j < 25; j++) {
+            for (i = 0; i < 25; i++) {
+                ctx.fillRect(i * 30, j * 30, 25, 25)
+            }
+        }
+
+    }
+    function tailPos(){
+       if(snakeStart===true){
+        tailX.push(snakeX)
+        tailY.push(snakeY)
+        tailX.splice(0,1)
+        tailY.splice(0,1)
+       }
+    }
+    function keydownHandler(e) {
+        console.log(e)
+        snakeStart=true
+        debugger
+        if (e.key === "w") {
+            changeY = -30
+            changeX = 0
+            tailChangeY=-30
+            tailChangeX=0
+        } if (e.key === "s") {
+            changeY = 30
+            changeX = 0
+            tailChangeY=30
+            tailChangeX=0
+        } if (e.key === "d") {
+            changeX = 30
+            changeY = 0
+            tailChangeX= 30
+            tailChangeY=0
+        } if (e.key === "a") {
+            changeX = -30
+            changeY = 0
+            tailChangeX=-30
+            tailChangeY=0
+        }
+        
+        //kids eat free on tuesdays
+    }
+    function changePos() {
+        if(snakeDie===false){
+            snakeX = snakeX + changeX
+        snakeY = snakeY + changeY
+        if (snakeX >= 750) {
+            snakeX = 60
+            snakeY = 60
+            changeX = 0
+            changeY = 0
+            window.open("death.html", "_blank");
+            snakeDie = true
+        } if (snakeX <= -30) {
+            snakeX = 60
+            snakeY = 60
+            changeX = 0
+            changeY = 0
+            window.open("death.html", "_blank");
+            snakeDie = true
+        } if (snakeY >= 720) {
+            snakeX = 60
+            snakeY = 60
+            changeX = 0
+            changeY = 0
+            window.open("death.html", "_blank");
+            snakeDie = true
+        } if (snakeY <= -30) {
+            snakeX = 60
+            snakeY = 60
+            changeX = 0
+            changeY = 0
+            window.open("death.html", "_blank");
+            snakeDie = true
+        }for (i = 0; i < tailX.length; i++){
+            if(snakeX===tailX[i]){
+                if(snakeY===tailY[i]){
+                    window.open("death.html", "_blank");
+                snakeDie = true
+                }
+            }
+        }
+        }if(snakeX===abbleX){
+            if(snakeY===abbleY){
+                tailX.push(snakeX)
+                tailY.push(snakeY)
+                abbleDrawn=false
+                speed = speed - speed
+            }
+        }
+    }
+
+</script>
+
+</html>
